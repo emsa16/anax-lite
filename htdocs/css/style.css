@@ -1,0 +1,43 @@
+html {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+nav {
+  text-align: center;
+}
+
+h1 {
+  text-align: center;
+}
+
+footer {
+  clear: both;
+  text-align: center;
+  font-size: 13px;
+  color: grey;
+}
+
+.site-title {
+  font-size: 2.8em;
+}
+
+.site-slogan {
+  font-style: italic;
+}
+
+.me {
+  float: right;
+  max-width: 220px;
+  margin: 3px;
+}
+
+.book {
+  float: right;
+  max-width: 400px;
+  margin-bottom: 20px;
+}

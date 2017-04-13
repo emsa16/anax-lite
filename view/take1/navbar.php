@@ -1,10 +1,13 @@
 <?php
-$urlHome  = $app->url->create("");
-$urlAbout = $app->url->create("about");
-$urlWrong = $app->url->create("some/route");
+$urlHome   = $app->url->create("");
+$urlAbout  = $app->url->create("about");
+$urlReport = $app->url->create("report");
+$urlWrong  = $app->url->create("some/route");
 
-?><navbar>
-<a href="<?= $urlHome ?>">Home</a> |
-<a href="<?= $urlAbout ?>">About</a> | 
-<a href="<?= $urlWrong ?>">Some/Route</a>
-</navbar>
+?><nav>
+<a href="<?= $urlHome ?>">Hem</a> |
+<a href="<?= $urlAbout ?>">Om</a> |
+<a href="<?= $urlReport ?>">Redovisningar</a> |
+<a href="<?= $urlWrong ?>">404-rutt</a>
+</nav>
+</header>

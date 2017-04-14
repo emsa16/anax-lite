@@ -1,4 +1,5 @@
-<h1>Om Mig Själv</h1>
+
+<h1>Presentation av mig</h1>
 
 <img src="img/profile.jpg" class="me" alt="Bild på Emil Sandberg">
 

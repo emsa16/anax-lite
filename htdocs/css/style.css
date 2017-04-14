@@ -7,8 +7,31 @@ body {
   margin: 0 auto;
 }
 
-nav {
+.site-title {
+  font-size: 2.8em;
+}
+
+.site-slogan {
+  font-style: italic;
+}
+
+.navbar ul {
   text-align: center;
+  list-style: none;
+}
+
+.navbar ul li {
+  display: inline-block;
+  margin: 0 1em;
+}
+
+.navbar a {
+  text-decoration: none;
+}
+
+.current {
+  font-weight: bold;
+  text-decoration: underline;
 }
 
 h1 {
@@ -20,14 +43,6 @@ footer {
   text-align: center;
   font-size: 13px;
   color: grey;
-}
-
-.site-title {
-  font-size: 2.8em;
-}
-
-.site-slogan {
-  font-style: italic;
 }
 
 .me {

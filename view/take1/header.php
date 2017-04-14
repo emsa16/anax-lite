@@ -1,9 +1,13 @@
+<?php
+$urlCSS = $app->url->asset("css/style.css");
+?>
+
 <!doctype html>
 <html lang="sv">
 <head>
     <meta charset="utf-8">
     <title><?= $title ?> | oophp</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="<?= $urlCSS ?>">
 </head>
 <body>
     <header>

@@ -20,6 +20,10 @@ return [
             "text" => "Redovisningar",
             "route" => "report",
         ],
+        "session" => [
+            "text" => "Session",
+            "route" => "session",
+        ],
         "404" => [
             "text" => "404",
             "route" => "some/route",

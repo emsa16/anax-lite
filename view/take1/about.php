@@ -1,5 +1,6 @@
 <?php
 $urlStatus = $app->url->create("status");
+$urlGuess  = $app->url->create("../../kmom01/guess");
 ?>
 
 <h1>Om denna sida</h1>
@@ -21,4 +22,7 @@ $urlStatus = $app->url->create("status");
 </p>
 <p>
     <a href="<?= $urlStatus ?>">Få information om systemet som JSON</a>
+</p>
+<p>
+    <a href="<?= $urlGuess ?>">Gissa numret-spel</a>
 </p>

@@ -3,22 +3,23 @@
  * Bootstrap the framework.
  */
 // Where are all the files? Both are needed by Anax.
-define("ANAX_INSTALL_PATH", realpath(__DIR__ . "/.."));
+define("ANAX_INSTALL_PATH", realpath(__DIR__."/.."));
 define("ANAX_APP_PATH", ANAX_INSTALL_PATH);
 
-// Include essentials
-require ANAX_INSTALL_PATH . "/config/error_reporting.php";
+// Include essentials.
+require ANAX_INSTALL_PATH."/config/error_reporting.php";
 
 // Get the autoloader by using composers version.
-require ANAX_INSTALL_PATH . "/vendor/autoload.php";
+require ANAX_INSTALL_PATH."/vendor/autoload.php";
 
-// Add all resources to $app
-$app = new \Emsa\App\App();
-$app->request = new \Anax\Request\Request();
+// Add all resources to $app.
+$app           = new \Emsa\App\App();
+$app->request  = new \Anax\Request\Request();
 $app->response = new \Anax\Response\Response();
-$app->url     = new \Anax\Url\Url();
-$app->router  = new \Anax\Route\RouterInjectable();
+$app->url      = new \Anax\Url\Url();
+$app->router   = new \Anax\Route\RouterInjectable();
 $app->view     = new \Anax\View\ViewContainer();
+$app->navbar   = new \Emsa\Navbar\Navbar();
 
 // Inject $app into the view container for use in view files.
 $app->view->setApp($app);
@@ -40,8 +41,13 @@ $app->url->setScriptName($app->request->getScriptName());
 $app->url->configure("url.php");
 $app->url->setDefaultsFromConfiguration();
 
-// Load the routes
-require ANAX_INSTALL_PATH . "/config/route.php";
+// Inject $app into the navbar container to make available for navbar class.
+$app->navbar->setApp($app);
+// Configure navbar to include content of current project.
+$app->navbar->configure("navbar.php");
 
-// Leave to router to match incoming request to routes
+// Load the routes.
+require ANAX_INSTALL_PATH."/config/route.php";
+
+// Leave to router to match incoming request to routes.
 $app->router->handle($app->request->getRoute(), $app->request->getMethod());

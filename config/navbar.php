@@ -24,6 +24,10 @@ return [
             "text" => "Session",
             "route" => "session",
         ],
+        "kalender" => [
+            "text" => "Kalender",
+            "route" => "kalender",
+        ],
         "404" => [
             "text" => "404",
             "route" => "some/route",

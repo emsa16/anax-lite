@@ -1,11 +1,12 @@
 <?php
 $urlStatus = $app->url->create("status");
 $urlGuess  = $app->url->create("../../kmom01/guess");
+$urlBook   = $app->url->asset("image/php.jpg");
 ?>
 
 <h1>Om denna sida</h1>
 
-<img class="book" src="image/php.jpg" alt="Boken: Beginning PHP and MySQL: From Novice to Professional" />
+<img class="book" src="<?= $urlBook ?>" alt="Boken: Beginning PHP and MySQL: From Novice to Professional" />
 
 <p>Denna webbsida är en del <i>oophp</i>-kursen på BTH våren 2017.</p>
 <p>Vi lär oss följande koncept och tekniker:</p>

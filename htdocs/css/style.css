@@ -56,3 +56,49 @@ footer {
   max-width: 400px;
   margin-bottom: 20px;
 }
+
+.calendar {
+  margin: 5px auto;
+  border-collapse: collapse;
+}
+
+.calendar tr,
+.calendar td,
+.calendar th {
+  border: 1px solid black;
+  text-align: center;
+}
+
+.calendar tr {
+  height: 4em;
+}
+
+.calendar td {
+  font-size: 1.4em;
+  min-width: 4.5em;
+}
+
+.cal-img {
+  width: 100%;
+}
+
+.red-day {
+  color: red;
+}
+
+.calendar .shadow-day {
+  font-size: 0.8em;
+  background-color: lightgrey;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.center {
+  text-align: center;
+}

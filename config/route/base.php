@@ -91,6 +91,63 @@ $app->router->add("view/test4", function () use ($app) {
                   ->send();
 });
 
+$app->router->add("kalender", function () use ($app) {
+    $app->session->start();
+    if (!($app->session->has("year"))) {
+        $app->session->set("year", getdate()['year']);
+    }
+    if (!($app->session->has("month"))) {
+        $app->session->set("month", getdate()['mon']);
+    }
+
+    $year  = $app->session->get("year");
+    $month = $app->session->get("month");
+
+    $app->view->add("take1/header", ["title" => "Kalender"]);
+    $app->view->add("navbar2/navbar");
+    $app->view->add("take1/calendar", ["year" => $year, "month" => $month]);
+    $app->view->add("take1/footer");
+
+    $app->response->setBody([$app->view, "render"])
+                  ->send();
+});
+
+$app->router->add("kalender/next", function () use ($app) {
+    $app->session->start();
+    if (!($app->session->has("year"))) {
+        $app->session->set("year", getdate()['year']);
+    }
+    if (!($app->session->has("month"))) {
+        $app->session->set("month", getdate()['month']);
+    }
+
+    $year  = $app->session->get("year");
+    $month = $app->session->get("month");
+    list($nextYear, $nextMonth) = $app->calendar->getNext($year, $month);
+    $app->session->set("year", $nextYear);
+    $app->session->set("month", $nextMonth);
+
+    $app->response->redirect($app->url->create("kalender"));
+});
+
+$app->router->add("kalender/previous", function () use ($app) {
+    $app->session->start();
+    if (!($app->session->has("year"))) {
+        $app->session->set("year", getdate()['year']);
+    }
+    if (!($app->session->has("month"))) {
+        $app->session->set("month", getdate()['month']);
+    }
+
+    $year  = $app->session->get("year");
+    $month = $app->session->get("month");
+    list($prevYear, $prevMonth) = $app->calendar->getPrevious($year, $month);
+    $app->session->set("year", $prevYear);
+    $app->session->set("month", $prevMonth);
+
+    $app->response->redirect($app->url->create("kalender"));
+});
+
 $app->router->add("status", function () use ($app) {
     $data = [
         "Server" => php_uname(),

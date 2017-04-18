@@ -1,7 +1,9 @@
-
+<?php
+$urlProfile = $app->url->asset("img/profile.jpg");
+?>
 <h1>Presentation av mig</h1>
 
-<img src="img/profile.jpg" class="me" alt="Bild på Emil Sandberg">
+<img src="<?= $urlProfile ?>" class="me" alt="Bild på Emil Sandberg">
 
 <ul>
     <li>studerat och arbetat med teater och tv sedan 2005</li>

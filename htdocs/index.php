@@ -21,6 +21,7 @@ $app->router   = new \Anax\Route\RouterInjectable();
 $app->view     = new \Anax\View\ViewContainer();
 $app->navbar   = new \Emsa\Navbar\Navbar();
 $app->session  = new \Emsa\Session\Session();
+$app->calendar = new \Emsa\Calendar\Calendar();
 
 // Inject $app into the view container for use in view files.
 $app->view->setApp($app);

@@ -8,3 +8,4 @@ $calendar = $app->calendar->getMonthCal($year, $month, $app->url, "asset");
 
 echo $links;
 echo $calendar;
+echo "<p class='center'>Alla bilder tillhör public domain och är hämtade från <a href='https://pixabay.com/'>pixabay.com</a>.</p>";

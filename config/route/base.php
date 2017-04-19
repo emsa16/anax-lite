@@ -118,7 +118,7 @@ $app->router->add("kalender/next", function () use ($app) {
         $app->session->set("year", getdate()['year']);
     }
     if (!($app->session->has("month"))) {
-        $app->session->set("month", getdate()['month']);
+        $app->session->set("month", getdate()['mon']);
     }
 
     $year  = $app->session->get("year");
@@ -136,7 +136,7 @@ $app->router->add("kalender/previous", function () use ($app) {
         $app->session->set("year", getdate()['year']);
     }
     if (!($app->session->has("month"))) {
-        $app->session->set("month", getdate()['month']);
+        $app->session->set("month", getdate()['mon']);
     }
 
     $year  = $app->session->get("year");

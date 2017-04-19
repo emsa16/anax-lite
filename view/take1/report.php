@@ -31,9 +31,42 @@
 </p>
 
 <h2>Kursmoment 02</h2>
+<h3>Allmänna reflektioner:</h3>
 <p>
-    Redovisningstext...
+    Detta kursmoment var mer rimligt i omfattning än det första. Artiklarna och uppgifterna hängde bra ihop med varandra och gav mig ytterligare förståelse för hur ramverket fungerar, framförallt med frontkontrollern och config-filen samt hur modulerna fungerar och sätts in i ramverket. Det finns en artikel här om att skapa en Session-klass, något som vi redan gjort i första kursmomentet. Kan det vara så att artiklar och uppgifter flyttats runt bland kursmomenten utan att detta märkts? Det är annars en väldigt märklig ordning att lägga materialet i. Sedan måste jag nog kritisera att de enda läsanvisningarna i detta moment är "extra läsning i referenslitteraturen efter eget val", då det känns väldigt slappt. Orsaken till att jag valt att lära mig programmering via en skola är att jag litar på att lärarna är kompetenta och erfarna och att de valt ut bästa tillgängliga material för oss att läsa.
 </p>
+
+<h3>Hur känns det att skriva kod utanför och inuti ramverket, ser du fördelar och nackdelar med de olika sätten?</h3>
+<p>
+    Jag tycker att det är ett väldigt bra sätt att arbeta på att skapa separata koddelar som som när de är klara läggs in i ramverket som en modul. Jag tycker att en modulär struktur är väldigt praktisk och ser egentligen bara fördelar med det. Det är klart att om webbplatsen man bygger ska vara väldigt enkel så kanske det går snabbare och enklare att bara skapa en enkel sida och strunta helt i ramverk och moduler. Utmaningen jag ser framför mig är att undvika att göra de klasser/moduler jag skapar beroende av andra moduler så långt det går. I navbar-klassen så måste jag injecta app-objektet med setApp() för att kunna använda url- och request-modulerna, vilket gör den beroende av dessa moduler, men i just fallet med navbar så kändes det ofrånkomligt.
+</p>
+
+<h3>Hur väljer du att organisera dina vyer?</h3>
+<p>
+    Jag har lagt alla vy-filer som jag använder på min me-sida i mappen view/take1, förutom navbaren som ligger i den egna mappen view/navbar2. Varje route som ska visa upp en html-sida (i motsats till t.ex. ett JSON-svar) plockar in header-, navbar- och footer-filerna från view-mappen. Beroende på routen så läggs olika vyer till som body på sidan. Det är alltså samma struktur som tidigare, jag har valt att inte använda en layout-fil med regioner eller renderView()-metoden då jag inte riktigt kände behovet att omorganisera sidan. Min router känns i dagsläget funktionsduglig och tillräcklig som den är, att lägga till vyer där och sedan rendera är enkelt och tydligt nog. Det jag skulle kunna vinna på med att skapa en layout är att jag blir av med navbaren från view-mappen. I nuläget så innehåller navbar2/navbar.php bara ett anrop till metoden $app->navbar->getHTML() och en sluttagg för headern, för att html-koden ska bli korrekt. Kanske kunde en layout fixa till detta.
+</p>
+
+<h3>Berätta om hur du löste integreringen av klassen Session.</h3>
+<p>
+    Efter att läst igenom artikeln om vilka alternativ man har när man ska integrera en klass/tjänst/modul i ramverket så löste jag denna uppgift på det sätt som kändes spontanast och mest rakt på sak. Sessionsklassen lades in som en del av $app-objektet i frontkontrollern. Någon config-fil fanns det inte behov för och klassen är inte beroende av andra klasser heller så sedan var det bara att börja använda den. Alla anrop till sessionsobjektet sker i routern vilket gör vyn väldigt ren. I själva verket är det bara två router som använder vyn, huvudsidan för session och dump-sidan. Alla router börjar med att starta upp sessionen och beroende på routen manipuleras sessionen på olika sätt. För att få bättre kontroll på när information skrivs ut så gjorde jag om dump()-metoden i Session() så att den returnerar ett print_r()-värde så att jag kan skicka vidare det till vyn innan det skrivs ut på sidan.
+</p>
+
+<h3>Berätta om hur du löste uppgiften med Tärningsspelet 100/Månadskalendern, hur du tänkte, planerade och utförde uppgiften samt hur du organiserade din kod?</h3>
+<p>
+    Jag valde att göra månadskalendern eftersom den skiljer sig mer från tidigare uppgifter vi gjort, spelet påminde om spel vi gjort innan. Jag började med att studera alla de inbyggda funktioner och klasser som finns i PHP. Jag fastnade till sist för att använda getdate() i kombination med mktime() och extract() för att få ut variabler om månad, veckodag och datum som jag sedan sparar i klasserna. Jag har skapat fyra klasser, Calendar, Year, Month och Day. Frontkontrollern behöver bara läsa in Calendar-klassen, som i sin konstruktor använder Year-klassen, som i sin tur använder Month-klassen som i sin tur använder Day-klassen. På detta sätt har jag skapat kompositionsförhållanden mellan klasserna som känns naturliga. När Calendar() instantieras så skapas ett antal Year-objekt och för varje Year-objekt skapas 12 Month-objekt. I konstruktorn för Month så används mktime och getdate för att få ut månadens namn. Sökvägen till bilden för månaden ifråga skapas också i Month-konstruktorn. En annan inbyggd funktion som jag använde här är cal_days_in_month() som ger mig antal dagar i den månaden. Med hjälp av den informationen kan jag sedan skapa alla Day-objekten för den månaden. I konstrukturn för Day-klassen hämtas och sparas information om dagens datum och veckodagsnamn och -nummer. Där läggs även till information om dagen är den första i veckan eller om det är en röd dag.
+</p>
+<p>
+    Alla medlemsvariabler är privata och jag har därför skapat metoder i alla klasser för att hämta ut information om objektet. Något annat innehåller inte klasserna Year, Month och Day, så de är väldigt enkla men det finns goda möjligheter att bygga på funktionalitet i framtiden, som exempelvis att kunna skriva in meddelanden på en viss dag. Det är i metoden Calendar::getMonthCal som kalendervyn skapas. Den tar år och månad som parametrar, denna information lagrar jag i sessionen. Jag blir också tvungen att injecta metoden url->asset() till getMonthCal för att kunna skapa länken till kalenderbilden korrekt. Denna lösning känns inte klockren och skulle jag jobba vidare så skulle jag försöka göra om detta på ett snyggare sätt. Jag använder sedan en foreach-loop för att lägga in dagarna i en tabell. Om tabellen behöver fyllas ut i början eller slutet med dagar från andra månader så sköts även detta inuti loopen. Med metoden getOtherMonth hämtas intilliggande månad och metoden kontrollerar om både år och månad behöver bytas. Om dagen är den första i veckan så skapas en ny rad i tabellen. Om dagen är röd får dagen css-klassen 'red-day'.
+</p>
+<p>
+    Bläddringen i kalendern sköts genom länkar till routerna kalender/next och kalender/previous. I dessa router hämtas värdena på månad och år från sessionen och justeras med Calendar-metoderna getPrevious och getNext, som i sin tur använder sig av tidigare nämnda getOtherMonth. Routerna redirectar därefter till routen kalender.
+</p>
+
+<h3>Några tankar kring SQL så här långt?</h3>
+<p>
+    Jämfört med tidigare dbwebb-kurser så börjar vi nu gå in lite mer på djupet med SQL och det känns hela tiden intressantare när jag inser hur kraftfullt SQL-språket är. Jag gjorde del 7-11 i detta kursmoment och bland de uppgifterna var vyerna det mest givande. Jag ser genast hur väldigt användbart vyer kan vara om det man arbetar med är lite mer krångligt. Jag gissar att detta inte var möjligt i SQLite och börjar se hur det kan vara begränsande. Group by var lite svårt att greppa precis hur det fungerade, så jag testade lite olika satser med och utan group by-kommandot. Det känns nästan magiskt hur den organiserar informationen fastän det ju är fullt logiskt och enkelt egentligen.
+</p>
+
 
 <h2>Kursmoment 03</h2>
 <p>

@@ -22,6 +22,8 @@ $app->view     = new \Anax\View\ViewContainer();
 $app->navbar   = new \Emsa\Navbar\Navbar();
 $app->session  = new \Emsa\Session\Session();
 $app->calendar = new \Emsa\Calendar\Calendar();
+$app->db       = new \Emsa\Database\UserDatabase();
+$app->cookie   = new \Emsa\Cookie\Cookie();
 
 // Inject $app into the view container for use in view files.
 $app->view->setApp($app);
@@ -47,6 +49,11 @@ $app->url->setDefaultsFromConfiguration();
 $app->navbar->setApp($app);
 // Configure navbar to include content of current project.
 $app->navbar->configure("navbar.php");
+
+$app->db->configure("database.php");
+$app->db->connect();
+
+$app->session->start();
 
 // Load the routes.
 require ANAX_INSTALL_PATH."/config/route.php";

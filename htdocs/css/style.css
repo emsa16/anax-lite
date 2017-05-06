@@ -15,6 +15,16 @@ body {
   font-style: italic;
 }
 
+.user {
+  float: right;
+  margin: 20px 2px;
+}
+
+.user a {
+  font-weight: bold;
+  color: black;
+}
+
 .navbar ul {
   text-align: center;
   list-style: none;

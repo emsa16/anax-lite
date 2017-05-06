@@ -92,7 +92,6 @@ $app->router->add("view/test4", function () use ($app) {
 });
 
 $app->router->add("kalender", function () use ($app) {
-    $app->session->start();
     if (!($app->session->has("year"))) {
         $app->session->set("year", getdate()['year']);
     }
@@ -113,7 +112,6 @@ $app->router->add("kalender", function () use ($app) {
 });
 
 $app->router->add("kalender/next", function () use ($app) {
-    $app->session->start();
     if (!($app->session->has("year"))) {
         $app->session->set("year", getdate()['year']);
     }
@@ -131,7 +129,6 @@ $app->router->add("kalender/next", function () use ($app) {
 });
 
 $app->router->add("kalender/previous", function () use ($app) {
-    $app->session->start();
     if (!($app->session->has("year"))) {
         $app->session->set("year", getdate()['year']);
     }

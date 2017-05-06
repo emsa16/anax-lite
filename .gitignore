@@ -3,3 +3,5 @@
 /cache
 /vendor
 .DS_Store
+/config/database.php
+/sql/setup-user.sql

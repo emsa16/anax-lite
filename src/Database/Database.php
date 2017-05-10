@@ -157,7 +157,7 @@ class Database implements \Anax\Common\ConfigureInterface
      */
     public function statementException($sth, $sql, $param)
     {
-        throw new Exception(
+        throw new \Exception(
             $sth->errorInfo()[2]
             . "<br><br>SQL ("
             . substr_count($sql, "?")

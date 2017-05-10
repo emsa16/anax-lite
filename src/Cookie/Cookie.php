@@ -17,7 +17,6 @@ class Cookie
     public function __construct($time = 2592000)
     {
         $this->expire = (time() + $time);
-
     }
 
 
@@ -31,7 +30,6 @@ class Cookie
     public function has($key)
     {
         return array_key_exists($key, $_COOKIE);
-
     }
 
 
@@ -46,7 +44,6 @@ class Cookie
     public function set($name, $val)
     {
         setcookie($name, $val);
-
     }
 
 
@@ -61,7 +58,6 @@ class Cookie
     public function get($key, $default = false)
     {
         return (self::has($key)) ? $_COOKIE[$key] : $default;
-
     }
 
 
@@ -74,7 +70,6 @@ class Cookie
     public function dump()
     {
         return print_r($_COOKIE, true);
-
     }
 
 
@@ -90,7 +85,6 @@ class Cookie
         if (self::has($key)) {
             unset($_COOKIE[$key]);
         }
-
     }
 
 
@@ -104,6 +98,5 @@ class Cookie
         foreach ($_COOKIE as $key => $value) {
             setcookie($key, $value, (time() - 3600));
         }
-
     }
 }

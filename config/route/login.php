@@ -8,8 +8,8 @@ $app->router->add("login", function () use ($app) {
     if ($app->session->has("name")) {
         $name = $app->session->get('name');
         header("Refresh:2; ".$app->url->create('profile'));
-        echo "<p>Du är redan inloggad som <b>$name</b></p>
-        <p>Omdirigerar dig till din profilsida...</p>";
+        echo "<p>Inloggad som <b>$name</b></p>
+        <p>Omdirigerar till profilsida...</p>";
         return;
     }
 
@@ -40,6 +40,9 @@ $app->router->add("validate", function () use ($app) {
             // Verify user password.
             if (password_verify($user_pass, $get_hash)) {
                 $app->session->set("name", $user_name);
+                if ($app->db->isAdmin($user_name)) {
+                    $app->session->set("admin", $user_name);
+                }
                 $app->response->redirect($app->url->create("profile"));
             } else {
                 // Redirect to login.
@@ -59,8 +62,8 @@ $app->router->add("register", function () use ($app) {
     if ($app->session->has("name")) {
         $name = $app->session->get('name');
         header("Refresh:2; ".$app->url->create('profile'));
-        echo "<p>Du är redan inloggad som <b>$name</b></p>
-        <p>Omdirigerar dig till din profilsida...</p>";
+        echo "<p>Inloggad som <b>$name</b></p>
+        <p>Omdirigerar till profilsida...</p>";
         return;
     }
 
@@ -81,13 +84,13 @@ $app->router->add("handle_new_user", function () use ($app) {
     $user_pass = isset($_POST["new_pass"]) ? htmlentities($_POST["new_pass"]) : null;
     $re_user_pass = isset($_POST["re_pass"]) ? htmlentities($_POST["re_pass"]) : null;
 
-    if ($user_name !== null && $user_pass !== null && $re_user_pass !== null) {
+    if ($user_name != null && $user_pass != null && $re_user_pass != null) {
         // Check if username exists.
         if (!$app->db->exists($user_name)) {
             // Check passwords match.
             if ($user_pass !== $re_user_pass) {
-                echo "Lösenorden matchar ej!";
                 header("Refresh:2; ".$app->url->create('register'));
+                echo "Lösenorden matchar ej!";
             } else {
                 // Make a hash of the password.
                 $crypt_pass = password_hash($user_pass, PASSWORD_DEFAULT);
@@ -98,8 +101,8 @@ $app->router->add("handle_new_user", function () use ($app) {
                 echo "<p><b>$user_name</b> är registrerad!</p><p><a href='$loginUrl'>Logga in</a></p>";
             }
         } else {
-            echo "Denna användare finns redan! Välj ett annat användarnamn.";
             header("Refresh:2; ".$app->url->create('register'));
+            echo "Denna användare finns redan! Välj ett annat användarnamn.";
         }
     } else {
         $app->response->redirect($app->url->create("register"));

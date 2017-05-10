@@ -3,8 +3,8 @@ $urlCSS = $app->url->asset("css/style.css");
 $profileUrl = $app->url->create("profile");
 
 $loggedIn = $app->session->has("name")
-    ? "Inloggad som:<br /><a href='$profileUrl'>".$app->session->get('name')."</a>"
-    : "";
+    ? "Inloggad som:<br /><a title='Visa profil' href='$profileUrl'>".$app->session->get('name')."</a> (<a href='".$app->url->create('logout')."'>Logga ut</a>)"
+    : "<a href='".$app->url->create('login')."'>Logga in</a>";
 
 ?>
 

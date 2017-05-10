@@ -28,10 +28,6 @@ return [
             "text" => "Kalender",
             "route" => "kalender",
         ],
-        "login" => [
-            "text" => "Logga in",
-            "route" => "login",
-        ],
         "404" => [
             "text" => "404",
             "route" => "some/route",

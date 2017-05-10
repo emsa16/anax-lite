@@ -15,6 +15,23 @@ class UserDatabase extends Database
         $stmt->execute();
     }
 
+    public function deleteUser($user)
+    {
+        $sql = "DELETE FROM me_users WHERE name = ?;";
+        $this->execute($sql, [$user]);
+    }
+
+    /**
+     * Searches for users in the database
+     * @param  $search string The search string
+     * @return void
+     */
+    public function searchUsers($search, $orderBy = "name", $order = "ASC", $limit = 4, $offset = 0)
+    {
+        $sql = "SELECT * FROM me_users WHERE name LIKE ? ORDER BY $orderBy $order LIMIT $limit OFFSET $offset";
+        return $this->executeFetchAll($sql, [$search]);
+    }
+
     /**
      * Gets the hashed password from the database
      * @param $user string The user to get password from/for
@@ -43,6 +60,19 @@ class UserDatabase extends Database
     }
 
     /**
+     * Changes the username for a user
+     *
+     * @param $user    string The user to change the username for
+     * @param $newName string The new username
+     * @return void
+     */
+    public function changeUsername($user, $newName)
+    {
+        $stmt = $this->pdo->prepare("UPDATE me_users SET name='$newName' WHERE name='$user'");
+        $stmt->execute();
+    }
+
+    /**
      * Check if user exists in the database
      * @param $user string The user to search for
      * @return bool true if user exists, otherwise false
@@ -53,5 +83,18 @@ class UserDatabase extends Database
         $stmt->execute();
         $row = $stmt->fetch(\PDO::FETCH_ASSOC);
         return !$row ? false : true;
+    }
+
+    /**
+     * Check if user is an admin
+     * @param $user string The user to search for
+     * @return bool true if user exists, otherwise false
+     */
+    public function isAdmin($user)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM me_users WHERE name='$user'");
+        $stmt->execute();
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $row["level"] === "admin" ? true : false;
     }
 }

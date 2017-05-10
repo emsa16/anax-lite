@@ -69,8 +69,39 @@
 
 
 <h2>Kursmoment 03</h2>
+
+<h3>Allmänna reflektioner</h3>
 <p>
-    Redovisningstext...
+    Uppgifterna tog sin goda stund att bli klara med och jag blev tvungen att prioritera hårt vad jag skulle hinna göra, så jag är inte särskilt nöjd med mina lösningar på uppgifterna. Allting fungerar men det ser inte snyggt ut, varken i webbläsaren eller i koden. Det ligger mycket kod i routerna och där kunde jag göra bättre lösningar med att lyfta ut kod till en klass om jag hade tid. Login- och admin-sidorna flöder inte helt konsekvent och felmeddelanden som att man slagit in fel lösenord dumpas ut väldigt fult just nu. Min me-sida är också utseendemässigt väldigt enkel, men jag tycker samtidigt inte att detta känns prioriterat i kursen som är väldigt fokuserad på det tekniska.
+</p>
+
+<h3>Hur kändes det att jobba med PHP PDO, SQL och MySQL?</h3>
+<p>
+    Vi har ju använt oss av PDO tidigare i htmlphp-kursen, men jag har fått en större förståelse för den nu i denna kurs, speciellt när vi använder MySQL istället för SQLite. Det är bekvämt att ha ett interface som fungerar på samma sätt även om databasen är en annan. Ytterligare bekvämlighet får man när man lägger allting i klasser. När man vet att man har en stabil klass med enkla och tydliga metoder är det smidigt att jobba mot databasen i sina andra filer. I artikeln "Kom igång med SQL" så har vi fått prova på kommandon och trick i SQL som jag innan aldrig hade insett ens var möjliga. Det som sticker ut mest är hur man kan använda vyer och join-satser för att kunna modellera sin data och databas. Även om jag bävar lite inför det så ser jag framemot konkreta uppgifter längre fram i kursen där vi får använda dessa grejer i praktiken. Fortfarande är jag inte säker på vilka grejer som är möjliga även i SQLite och vilka som är specifikt MySQL, men gissar att SQLite är begränsad vad gäller de mer avancerade kommandona vi använt.
+</p>
+<p>
+    Jag har nu gjort de sista avsnitten i SQL-artikeln, del 12-15. I min sql-fil har jag kommenterat bort select-satserna för det blev så många att MySQL Workbench blev opraktiskt att använda.
+</p>
+
+<h3>Reflektera kring koden du skrev för att lösa uppgifterna, klasser, formulär, integration Anax Lite?</h3>
+<p>
+    Jag började med att göra om Database-klassen lite grann så att den matchade andra moduler bättre, genom att lägga till ConfigureInterface och ha config-koden i sin egen fil i config-mappen. Connect-klassen från exemplet gjorde jag om till UserDatabase, en subklass till Database, med metoder specifika för min tabell med användarinformation. Jag formade min lokala databas så att miljön var likadan som på studentservern. En stund försökte jag hitta en konfiguration som skulle fungera såväl lokalt som på studentservern, men jag kunde inte lösa det då det krävs olika hosts i dsn-variabeln. Till slut landade jag på en associativ array i config-filen, som mappar värdet på $_SERVER["HTTP_HOST"] mot motsvarande databashost. För att undvika att lösenordet till studentdatabasen hamnar på GitHub så har jag lagt till config/database.php och setup-user.sql i min .gitignore. I repot finns istället default-filer som fungerar som exempel men måste modifieras för att kunna användas på riktigt.
+</p>
+<p>
+    Jag har verkligen blivit tvungen att hålla det enkelt och grovhackat för att uppgifterna tagit lång tid att utföra och det har varit en del problem på vägen. Jag hade stora problem med input_parameters till prepared statements. Problemet var att pagineringen av användartabellen krävde värden på LIMIT och OFFSET men när jag gör PDOStatement::execute på mitt SQL-kommando så omvandlar mina integer-parametrar till strängar. Jag läste mig fram till det beror på att default-hanteringen i PDOStatement::execute av input_parameters är PDO::PARAM_STR. Jag gjorde då om i min databas-klass så att varje input_parameter läggs in i mitt statement med bindValue istället och för varje parameter kollas värdetypen så att det blir rätt. Då gick den delen äntligen igenom. Då visade det sig däremot att ASC/DESC inte går att lägga in som en input_parameter och då insåg jag till slut att jag måste gå tillbaka hur SQL-satsen ursprungligen hanteras i exemplet, med att lägga in variablerna direkt i den såhär: "SELECT * FROM me_users WHERE name LIKE ? ORDER BY $orderBy $order LIMIT $limit OFFSET $offset". Detta känns inte lika säkert men koden innehåller ju kontroller av variablerna innan så det fick bli såhär. Ett annat problem som uppstod var när jag namespacade mina databas-klasser, för då hittade inte systemet längre PDO och Exception-klasserna som finns därinne. Med lite trial & error fick jag det löst genom att benämna dem \PDO och \Exception.
+</p>
+<p>
+    Jag har lagt inloggningslänken i headern ovanför navbaren och när man är inloggad syns där istället namnet på den som är inloggad, och klickar man på namnet så tas man till användarprofilen. Användarna är så enkla som det bara är möjligt, de har endast ett användarnamn, lösenord och behörighetsnivå. Det enda en användare kan göra på sin profil nu är att ändra lösenord och de kan inte se sin behörighetsnivå. Admin-sidan nås via en länk i footern och den routen är endast nåbar om man är inloggad med admin-behörighet. Admin kan ändra användarens namn och lösenord och lägga till och ta bort användare. Lösenorden syns i klartext för admin men behöver inte dubbelinmatas i motsats till gränssnittet för en vanlig användare. Admin kan se behörighetsnivåerna på användare men inte ändra behörighetsnivåer i nuvarande version. Admin kan inte heller radera sitt eget konto för att undvika en situation utan administratörskonton. Jag förstod inte syftet med krav 1 i admin-uppgiften att man ska skapa en setup-user-admin.sql. Var det meningen att admins skulle in i en egen tabell? Jag försökte kolla på hur andra tolkat det i deras repon men blev inte klokare av det så jag har hoppat över det. Alla användar- och adminkonton ligger i tabellen me_users och kolumnen "level" avgör om de är admin eller vanliga användare. admin / admin har admin-behörighet och doe / doe har vanlig användarbehörighet.
+</p>
+
+<h3>Känner du dig hemma i ramverket, dess komponenter och struktur?</h3>
+<p>
+    Överraskande lätt har jag tagit till mig hur ramverket fungerar och hur jag passar in nya delar och moduler i den. Speciellt lärorikt är när vi har fått i uppgift att lägga in klasser och liknande som inte är färdigt formade lego-bitar som man bara lägger in i ramverket, utan vi behöver skapa config-filer och anpassa klasserna själva för att få till det så att det fungerar väl inuti ramverket. Jag använder kanske inte alla modulerna, speciellt de som jag inte byggt själv utan bara dragit ner med composer, så mycket som jag kunde. Emellanåt tittar jag i dessa moduler om jag behöver förstå vad en viss metod gör under huven men för att verkligen ha full kontroll över ramverket så behöver jag studera dem ännu närmare.
+</p>
+
+<h3>Hur bedömmer du svårighetsgraden på kursens inledande kursmoment, känner du att du lär dig något/bra saker?</h3>
+<p>
+    Det har varit tjockt med nya saker att lära sig de tre första momenten. Allting har känts väldigt relevant och mycket nyttigt att lära sig. Speciellt inloggningen och admin-gränssnittet detta kursmoment är viktiga verktyg att ha med sig i framtiden. OOP-delen har känts väldigt integrerad i arbetet och jag tycker verkligen att jag förstått hur användbart det är när man bygger hemsidor med ramverk på detta sätt. När jag tittar igenom anax-lite-katalogen så finner jag det anmärkningsvärt hur omfattande den redan blivit och att jag ändå vet vad varje del gör och att den behövs för att sidan ska fungera. Det har varit lagom utmanande hela tiden, men storleken på uppgifterna har varit väldigt utmanande. Jag har inte kunnat göra allting så ordentligt som jag önskat och det finns hela tiden mycket jag skulle vilja fixa till, framförallt bli konsekvent med vilken kod som ska ligga i vyerna, vilken i routerna och vilken någon annanstans.
 </p>
 
 <h2>Kursmoment 04</h2>

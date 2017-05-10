@@ -238,3 +238,19 @@ behat:
 theme:
 	@$(call HELPTEXT,$@)
 	[ ! -d theme ] || $(MAKE) --directory=theme build install
+
+
+
+# target: mysql              - Log in to local mysql database.
+.PHONY: mysql
+mysql:
+	@$(call HELPTEXT,$@)
+	/Applications/XAMPP/bin/mysql -uemsa16 -prmGex7GVbMSf emsa16
+
+
+
+# target: mysql-reset        - Log in to local mysql database.
+.PHONY: mysql-reset
+mysql-reset:
+	@$(call HELPTEXT,$@)
+	/Applications/XAMPP/bin/mysql -uemsa16 -prmGex7GVbMSf emsa16 < sql/setup-user.sql

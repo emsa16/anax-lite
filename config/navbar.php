@@ -28,6 +28,10 @@ return [
             "text" => "Kalender",
             "route" => "kalender",
         ],
+        "filter" => [
+            "text" => "Filtertest",
+            "route" => "filter",
+        ],
         "404" => [
             "text" => "404",
             "route" => "some/route",

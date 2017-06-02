@@ -24,6 +24,7 @@ $app->session  = new \Emsa\Session\Session();
 $app->calendar = new \Emsa\Calendar\Calendar();
 $app->db       = new \Emsa\Database\UserDatabase();
 $app->cookie   = new \Emsa\Cookie\Cookie();
+$app->filter   = new \Emsa\Textfilter\Textfilter();
 
 // Inject $app into the view container for use in view files.
 $app->view->setApp($app);

@@ -145,6 +145,16 @@ $app->router->add("kalender/previous", function () use ($app) {
     $app->response->redirect($app->url->create("kalender"));
 });
 
+$app->router->add("filter", function () use ($app) {
+    $app->view->add("take1/header", ["title" => "Hem"]);
+    $app->view->add("navbar2/navbar");
+    $app->view->add("take1/filter");
+    $app->view->add("take1/footer");
+
+    $app->response->setBody([$app->view, "render"])
+                  ->send();
+});
+
 $app->router->add("status", function () use ($app) {
     $data = [
         "Server" => php_uname(),

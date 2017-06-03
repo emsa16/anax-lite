@@ -5,3 +5,4 @@
 .DS_Store
 /config/database.php
 /sql/setup-user.sql
+/sql/setup-content.sql

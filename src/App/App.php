@@ -23,6 +23,46 @@ class App
 
 
     /**
+     * Check if key is set in POST.
+     *
+     * @param mixed $key     to look for
+     *
+     * @return boolean true if key is set, otherwise false
+     */
+    function hasKeyPost($key)
+    {
+        return array_key_exists($key, $_POST);
+    }
+
+
+
+    /**
+     * Get value from POST variable or return default value.
+     *
+     * @param mixed $key     to look for, or value array
+     * @param mixed $default value to set if key does not exists
+     *
+     * @return mixed value from POST or the default value
+     */
+    function getPost($key, $default = null)
+    {
+        if (is_array($key)) {
+            // $key = array_flip($key);
+            // return array_replace($key, array_intersect_key($_POST, $key));
+            foreach ($key as $val) {
+                $post[$val] = $this->getPost($val);
+            }
+            return $post;
+        }
+
+        return isset($_POST[$key])
+            ? $_POST[$key]
+            : $default;
+    }
+
+
+
+    /**
      * Function to create links for sorting and keeping the original querystring.
      *
      * @param string $column the name of the database column to sort by
@@ -66,5 +106,13 @@ EOD;
 
         // Build and return the modified querystring as url
         return $prepend . http_build_query($query);
+    }
+
+
+
+    public function redirect($url, $append = null)
+    {
+        $redirect = $this->url->create($url);
+        return $this->response->redirect($redirect.$append);
     }
 }

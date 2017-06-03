@@ -12,6 +12,11 @@ class Database implements \Anax\Common\ConfigureInterface
     /** @var $pdo the PDO connection. */
     protected $pdo;
 
+    private $mysqlPaths = [
+        "www.student.bth.se" => "/usr/bin/mysql",
+        "localhost:8080" => "/Users/Emil/bin/mysql"
+    ];
+
 
 
     /**
@@ -182,5 +187,32 @@ class Database implements \Anax\Common\ConfigureInterface
     public function lastInsertId()
     {
         return $this->pdo->lastInsertId();
+    }
+
+
+
+    public function resetTable($file)
+    {
+        $mysql = $this->mysqlPaths[$_SERVER["HTTP_HOST"]];
+
+        // Extract hostname and databasename from dsn
+        $dsnDetail = [];
+        preg_match("/mysql:host=(.+);dbname=([^;.]+)/", $this->config["dsn"], $dsnDetail);
+        $host = $dsnDetail[1];
+        $database = $dsnDetail[2];
+        $login = $this->config["login"];
+        $password = $this->config["password"];
+
+        if (isset($_POST["reset"]) || isset($_GET["reset"])) {
+            $command = "$mysql -h{$host} -u{$login} -p{$password} $database < $file 2>&1";
+            $output = [];
+            $status = null;
+            $res = exec($command, $output, $status);
+            $output = "<p>The command exit status was $status."
+                . "<br>The output from the command was:</p><pre>"
+                . print_r($output, 1);
+            return $output;
+        }
+        return null;
     }
 }

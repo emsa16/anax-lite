@@ -96,8 +96,9 @@ class Textfilter
      *
      * @return string beeing sanitized
      */
-    private function esc($value)
+    public function esc($value)
     {
-        return htmlentities($value);
+        // return htmlentities($value);
+        return htmlspecialchars($value);
     }
 }

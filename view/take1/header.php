@@ -14,6 +14,7 @@ $loggedIn = $app->session->has("name")
     <meta charset="utf-8">
     <title><?= $title ?> | oophp</title>
     <link rel="stylesheet" href="<?= $urlCSS ?>">
+    <script src="https://use.fontawesome.com/e5579368c4.js"></script>
 </head>
 <body>
     <header>

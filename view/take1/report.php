@@ -105,8 +105,38 @@
 </p>
 
 <h2>Kursmoment 04</h2>
+
+<h3>Allmänna reflektioner:</h3>
 <p>
-    Redovisningstext...
+    Spännande att ta sig an en egen bloggplattform. Jag fann det också lärorikt att jobba med att lagra webbsideinnehåll i databasen. Vi har ju jobbat med att hämta innehåll från en databas i htmlphp-projektet så detta är ju det naturliga nästa steget. Det som jag fortsätter att gilla så mycket i dessa studier är att man gör så konkreta framsteg och varje vecka lär man sig något som man inte hade en aning om veckan innan. Det motiverar mig starkt att se min egen utveckling så klart.
+</p>
+
+<h3>Finns något att säga kring din klass för texfilter, eller rent allmänt om formattering och filtrering av text som sparas i databasen av användaren?</h3>
+<p>
+    Jag valde medvetet att titta så lite som möjligt på CTextFilter när jag skapade min egen klass för samma ändamål. I klassen har jag den associativa arrayen callbacks som har filter-namnen som nycklar och motsvarande metodnamn i strängformat som värden. Sedan har jag min format-metod som är den enda metod man behöver använda utifrån (jag blev ändå tvungen att ändra mina andra metoder från private till public pga att phpmd klagade på att metoderna inte användes, pga det sätt jag strukturerat klassen). I format-metoden så körs texten igenom alla ombedda filter en i taget genom call_user_func. Jag valde att implementera även strip_tags och htmlspecialchars i denna klass och använder speciellt den senare flitigt i alla formulär och liknande. Det är en ganska enkel men bra klass som fungerar som den ska.
+</p>
+<p>
+    En testsida för att visa upp hur de olika formateringsfiltren fungerar finns i menyn under 'Filtertest' (anax-lite/htdocs/filter). För allt innehåll som sparas i databasen så har jag valt att inte köra strip_tags på innehållet, i och med att man kanske skriver om html i exempelvis en bloggpost och vill beskriva en tagg och den informationen skulle isåfall försvinna. Istället gör jag så med varje webbsida jag hämtar från databasen att jag först filtrerar den genom htmlspecialchars och därefter formaterar den enligt de filter som är aktuella för den. På det sättet visas innehållet säkert och på snyggast möjliga sätt.
+</p>
+
+<h3>Berätta hur du tänkte när du strukturerade klasserna och databasen för webbsidor och bloggposter?</h3>
+<p>
+    Jag har lagt all funktionalitet jag behövde för denna uppgift i klassen Content. Det är en lång rad metoder som i huvudsak endast innehåller en sql-sats och ett anrop till databas-modulen. Där finns även några metoder för att felhantera tomma paths och likadana slugs. Lösningen för den sistnämnda är jag ganska nöjd med, där är det huvudsakligen metoden checkDuplicateSlugs som rekursivt granskar alla slugs och tar fram en slug som är unik. Det är inte den mest optimala lösningen att ha alla metoder i samma klass men det fungerar så det får duga för stunden. Databasen ser i grunden likadan ut som i exempelartikeln. Jag har lagt till några vyer i databasen för att underlätta hanteringen av sidor, bloggposter och block.
+</p>
+
+<h3>Förklara vilka routes som används för att demonstrera funktionaliteten för webbsidor och blogg (så att en utomstående kan testa).</h3>
+<p>
+    Allting jag gjort i uppgiften 'Bygg webbsidor från innehåll i databasen' är samlat under menyvalet Content (anax-lite/htdocs/content/). Där finns en lista med länkar till olika undersidor vilka jag alla tänker beskriva härnäst. Alla länkar förutom admin-sidan går att nå utan att man är inloggad på sidan. Sidor (anax-lite/htdocs/content/pages) leder til en lista av sidor som är lagrade på databasen. Dessa är som normala webbsidor. Listan här visar endast de sidor som är publicerade och inte är raderade. Blogg (anax-lite/htdocs/content/blog) leder till en översikt över de bloggposter som finns i databasen. Även här syns endast publicerade och icke-raderade inlägg i denna vy. Exempelsida för block (anax-lite/htdocs/content/block) visar exempel på block som lagras i databasen, för tillfället en flash-region och en sidoruta. Strukturen för att åstadkomma detta är att jag i routen skapar arrayen 'blocks' som jag fyller med block vyn behöver och hämtar blocken med en metod i min Content-klass. Blocken filterformateras på samma sätt som sidor och bloggposter och skickas sedan till vyn. Slutligen finns admin-sidan (anax-lite/htdocs/content/admin), som kräver att man är inloggad antingen som doe eller admin. Den fulla översikten av alla sidor, bloggposter och block finns endast på admin-sidan. Därifrån kan man göra CRUD-kommandon och även återställa content-tabellen i databasen.
+</p>
+
+<h3>Hur känns det att dokumentera databasen så här i efterhand?</h3>
+<p>
+    Än så länge är databasen som är kopplad till me-sidan väldigt anspråkslös och att visualisera den ger inte så mycket. Men jag tycker ändå att det är bra att påbörja detta redan nu, för i takt med att databasen växer så är det viktigt att ha en god överblick. Uppgiften gav också en insikt om att databasen är en helhet, de två tabellerna som finns där än så länge kändes under uppgiftens gång som helt skilda entiteter men de hör ju ändå till samma databas. Genom att vi läste artikeln om en kokbok för databasmodellering så ser jag tydligt nyttan av att dokumentera skriftligt och visuellt sin databas under utvecklingens gång, för att veta vad det är man håller på med och vart man är på väg.
+</p>
+
+<h3>Om du är självkritisk till koden du skriver i Anax Lite, ser du förbättringspotential och möjligheter till alternativ struktur av din kod?</h3>
+<p>
+    Jag är tvungen att göra jobbiga beslut hela tiden att inte gå in och 'refactor' min kod, eftersom jag måste gå vidare till nästa uppgift. Just nu kan jag se flera möjlighet att rensa upp min kod ordentligt, speciellt i routerna. Jag behöver också tänka igenom hur jag vill ha mina klasser egentligen och om alla metoder egentligen ligger i den mest lämpade klassen. Speciellt körigt är det med min databaskoppling. Jag har en Database-klass och en subklass UserDatabase. Detta var logiskt när jag bara hade den tabellen men nu kom content-tabellen också in. Det är givetvis inte en bra idé att göra den till en subklass av Database, eftersom den klass som jag instansierar som en del av app-objektet är subklassen UserDatabase. Den har ju basklassens innehåll med sig, men det ställde till det för mig när jag nu ville ha kommandon för en annan tabell också. Lösningen blev väldigt ful, trots att den fungerar, så det är nog där jag skulle börja reda upp om jag fick möjlighet till det.
 </p>
 
 <h2>Kursmoment 05</h2>

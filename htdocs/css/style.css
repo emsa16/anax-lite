@@ -48,6 +48,24 @@ h1 {
   text-align: center;
 }
 
+.flash {
+    background-color: rgb(255, 100, 80);
+    border: 3px solid black;
+    max-width: 200px;
+    margin: 10px auto;
+    padding: 4px;
+    text-align: center;
+}
+
+aside {
+  float: right;
+  background-color: rgb(166, 247, 255);
+  border: 1px solid blue;
+  max-width: 160px;
+  padding-left: 4px;
+  margin: 10px;
+}
+
 footer {
   clear: both;
   text-align: center;

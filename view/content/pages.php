@@ -19,7 +19,7 @@ $pageUrl = $app->url->create("content/pages");
 ?>
     <tr>
         <td><?= $row->id ?></td>
-        <td><a href="<?= $pageUrl."/".$row->path ?>"><?= $row->title ?></a></td>
+        <td><a href="<?= $pageUrl ?>/<?= $row->path ? $row->path : $row->slug ?>"><?= $row->title ?></a></td>
         <td><?= $row->published ?></td>
         <td><?= $row->updated ?></td>
     </tr>

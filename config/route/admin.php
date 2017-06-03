@@ -1,10 +1,12 @@
 <?php
 
-$app->router->add("admin", function () use ($app) {
+$app->router->add("admin/**", function () use ($app) {
     if (!$app->session->has("admin")) {
         $app->response->redirect($app->url->create("login"));
     }
+});
 
+$app->router->add("admin", function () use ($app) {
     $app->view->add("take1/header", ["title" => "Admin"]);
     $app->view->add("navbar2/navbar");
     $app->view->add("admin/admin");
@@ -15,10 +17,6 @@ $app->router->add("admin", function () use ($app) {
 });
 
 $app->router->add("admin/read", function () use ($app) {
-    if (!$app->session->has("admin")) {
-        $app->response->redirect($app->url->create("login"));
-    }
-
     $accounts = "";
     $max = 1;
 
@@ -88,10 +86,6 @@ $app->router->add("admin/read", function () use ($app) {
 });
 
 $app->router->add("admin/create", function () use ($app) {
-    if (!$app->session->has("admin")) {
-        $app->response->redirect($app->url->create("login"));
-    }
-
     $app->view->add("take1/header", ["title" => "Skapa - Admin"]);
     $app->view->add("navbar2/navbar");
     $app->view->add("admin/create");
@@ -102,10 +96,6 @@ $app->router->add("admin/create", function () use ($app) {
 });
 
 $app->router->add("admin/handle_new_user", function () use ($app) {
-    if (!$app->session->has("admin")) {
-        $app->response->redirect($app->url->create("login"));
-    }
-
     // Handle incoming POST variables.
     $user_name = isset($_POST["new_name"]) ? htmlentities($_POST["new_name"]) : null;
     $user_pass = isset($_POST["new_pass"]) ? htmlentities($_POST["new_pass"]) : null;
@@ -131,10 +121,6 @@ $app->router->add("admin/handle_new_user", function () use ($app) {
 });
 
 $app->router->add("admin/update", function () use ($app) {
-    if (!$app->session->has("admin")) {
-        $app->response->redirect($app->url->create("login"));
-    }
-
     $user = $app->request->getGet("updateName");
     $results = $app->db->searchUsers($user);
     if ($results) {
@@ -153,10 +139,6 @@ $app->router->add("admin/update", function () use ($app) {
 });
 
 $app->router->add("admin/handle_update", function () use ($app) {
-    if (!$app->session->has("admin")) {
-        $app->response->redirect($app->url->create("login"));
-    }
-
     $user    = $app->request->getPost("name");
     $newName = $app->request->getPost("new_name");
     $newPass = $app->request->getPost("new_pass");
@@ -184,10 +166,6 @@ $app->router->add("admin/handle_update", function () use ($app) {
 });
 
 $app->router->add("admin/delete", function () use ($app) {
-    if (!$app->session->has("admin")) {
-        $app->response->redirect($app->url->create("login"));
-    }
-
     $user = $app->request->getGet("deleteName");
     if ($user && $app->db->exists($user) && !$app->db->isAdmin($user)) {
         $app->db->deleteUser($user);

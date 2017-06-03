@@ -9,7 +9,7 @@ $adminUrl = $app->url->create("content/admin");
 
     <p>
         <label>Title:<br>
-        <input type="text" name="contentTitle" value="<?= $app->filter->esc($content->title) ?>"/>
+        <input type="text" name="contentTitle" value="<?= $app->filter->esc($content->title) ?>" required/>
         </label>
     </p>
 

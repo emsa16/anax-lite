@@ -5,7 +5,7 @@ class Textfilter
 {
     private $callbacks = [
         "bbcode"   => "bbcode2html",
-        "link"     => "make_clickable",
+        "link"     => "makeClickable",
         "markdown" => "markdown",
         "nl2br"    => "newline2br",
         "esc"      => "esc",
@@ -30,7 +30,8 @@ class Textfilter
     * @param string text The text to be converted.
     * @returns string the formatted text.
     */
-    private function bbcode2html($text) {
+    public function bbcode2html($text)
+    {
         $search = array(
             '/\[b\](.*?)\[\/b\]/is',
             '/\[i\](.*?)\[\/i\]/is',
@@ -56,7 +57,8 @@ class Textfilter
      * @param string $text the text that should be formatted.
      * @return string with formatted anchors.
      */
-    private function make_clickable($text) {
+    public function makeClickable($text)
+    {
         return preg_replace_callback(
             '#\b(?<![href|src]=[\'"])https?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/))#',
             create_function(
@@ -74,17 +76,18 @@ class Textfilter
      *
      * @return string the formatted text.
      */
-    private function markdown($text)
+    public function markdown($text)
     {
-        return \Michelf\Markdown::defaultTransform($text);
+        $markdown = new \Michelf\Markdown();
+        return $markdown->defaultTransform($text);
     }
 
-    private function newline2br($text)
+    public function newline2br($text)
     {
         return nl2br($text);
     }
 
-    private function strip($text)
+    public function strip($text)
     {
         return strip_tags($text);
     }

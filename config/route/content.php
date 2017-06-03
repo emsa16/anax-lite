@@ -13,7 +13,27 @@ $app->router->add("content", function () use ($app) {
                    ->send();
 });
 
+$app->router->add("content/admin", function () use ($app) {
+    if (!$app->session->has("name")) {
+        $app->redirect("login");
+    }
+
+    $resultset = $app->content->getAll($app);
+
+    $app->view->add("take1/header", ["title" => "Admininnehåll"]);
+    $app->view->add("navbar2/navbar");
+    $app->view->add("content/admin", ["resultset" => $resultset]);
+    $app->view->add("take1/footer");
+
+    $app->response->setBody([$app->view, "render"])
+                   ->send();
+});
+
 $app->router->add("content/reset", function () use ($app) {
+    if (!$app->session->has("name")) {
+        $app->redirect("login");
+    }
+
     $file   = "../sql/setup-content.sql";
     $output = $app->db->resetTable($file);
 
@@ -26,19 +46,11 @@ $app->router->add("content/reset", function () use ($app) {
                    ->send();
 });
 
-$app->router->add("content/admin", function () use ($app) {
-    $resultset = $app->content->getAll($app);
-
-    $app->view->add("take1/header", ["title" => "Admininnehåll"]);
-    $app->view->add("navbar2/navbar");
-    $app->view->add("content/admin", ["resultset" => $resultset]);
-    $app->view->add("take1/footer");
-
-    $app->response->setBody([$app->view, "render"])
-                   ->send();
-});
-
 $app->router->add("content/edit", function () use ($app) {
+    if (!$app->session->has("name")) {
+        $app->redirect("login");
+    }
+
     $contentId = $app->getPost("contentId") ?: $app->request->getGet("id");
     if (!is_numeric($contentId)) {
         die("Not valid for content id.");
@@ -58,16 +70,22 @@ $app->router->add("content/edit", function () use ($app) {
             "contentId"
         ]);
 
-        if (!$params["contentSlug"]) {
-            $params["contentSlug"] = $app->content->slugify($params["contentTitle"]);
-        }
-
         if (!$params["contentPath"]) {
             $params["contentPath"] = null;
         }
 
         if (!$params["contentPublish"]) {
             $params["contentPublish"] = null;
+        }
+
+        if (!$params["contentSlug"]) {
+            $params["contentSlug"] = $app->content->slugify($params["contentTitle"]);
+        }
+
+        $slugs = $app->content->getSlugs($app, $contentId);
+        $append = $app->content->checkDuplicateSlugs($params["contentSlug"], $slugs);
+        if ($append) {
+            $params["contentSlug"] .= $append;
         }
 
         $app->content->update($app, $params);
@@ -86,6 +104,10 @@ $app->router->add("content/edit", function () use ($app) {
 });
 
 $app->router->add("content/create", function () use ($app) {
+    if (!$app->session->has("name")) {
+        $app->redirect("login");
+    }
+
     if ($app->hasKeyPost("doCreate")) {
         $title = $app->getPost("contentTitle");
         $app->content->create($app, $title);
@@ -103,6 +125,10 @@ $app->router->add("content/create", function () use ($app) {
 });
 
 $app->router->add("content/delete", function () use ($app) {
+    if (!$app->session->has("name")) {
+        $app->redirect("login");
+    }
+
     $contentId = $app->getPost("contentId") ?: $app->request->getGet("id");
     if (!is_numeric($contentId)) {
         die("Not valid for content id.");
@@ -182,6 +208,12 @@ $app->router->add("content/pages/**", function () use ($app) {
 
     $content = $app->content->getPage($app, $path);
 
+    // Om inga resultat hittas försöker databasen även leta på matchande
+    // slug, eftersom slugen används i länken om en path saknas
+    if (!$content) {
+        $content = $app->content->getPageFromSlug($app, $path);
+    }
+
     if (!$content) {
         $app->redirect("content/404"); // inte helt nöjd här, skulle vilja skicka med den felaktiga routen
     }
@@ -192,6 +224,26 @@ $app->router->add("content/pages/**", function () use ($app) {
     $app->view->add("take1/header", ["title" => $content->title]);
     $app->view->add("navbar2/navbar");
     $app->view->add("content/page", ["content" => $content]);
+    $app->view->add("take1/footer");
+
+    $app->response->setBody([$app->view, "render"])
+                   ->send();
+});
+
+$app->router->add("content/block", function () use ($app) {
+    $blocks = [
+        "flash" => $app->content->getBlock($app, "flash-1"),
+        "sidebar" => $app->content->getBlock($app, "sidebar-1"),
+    ];
+
+    foreach ($blocks as $content) {
+        $content->data = $app->filter->format($content->data, "esc");
+        $content->data = $app->filter->format($content->data, $content->filter);
+    };
+
+    $app->view->add("take1/header", ["title" => "Block"]);
+    $app->view->add("navbar2/navbar");
+    $app->view->add("content/block", ["blocks" => $blocks]);
     $app->view->add("take1/footer");
 
     $app->response->setBody([$app->view, "render"])

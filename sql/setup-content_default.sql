@@ -43,7 +43,9 @@ INSERT INTO `content` (`path`, `slug`, `title`, `data`, `type`, `filter`, `publi
     ('blogpost-2','nu-har-sommaren-kommit','Nu har sommaren kommit','Detta är en bloggpost som berättar att sommaren har kommit, ett budskap som kräver en bloggpost.','post','nl2br','2017-06-03 00:00:00','2017-06-03 12:48:28','2017-06-03 15:50:47',NULL),
     ('blogpost-3','nu-har-hosten-kommit','Nu har hösten kommit','Detta är en bloggpost som berättar att sommaren har kommit, ett budskap som kräver en bloggpost','post','nl2br','2017-11-03 00:00:00','2017-06-03 12:48:28','2017-06-03 15:51:00',NULL),
     ('store','store','Store','Här kan du handla en massa fina varor över nätet.','page','','2017-06-03 00:00:00','2017-06-03 13:51:30','2017-06-03 15:52:52','2017-06-03 15:52:07'),
-    ('blogpost-4','hur-lar-man-sig-php','Hur lär man sig PHP?','Det är lättare än man kan tro.... fortsätt skriva här, sparar som utkast.','post','',NULL,'2017-06-03 13:53:10','2017-06-03 15:53:39',NULL);
+    ('blogpost-4','hur-lar-man-sig-php','Hur lär man sig PHP?','Det är lättare än man kan tro.... fortsätt skriva här, sparar som utkast.','post','',NULL,'2017-06-03 13:53:10','2017-06-03 15:53:39',NULL),
+    (NULL,'sidebar-1','Sidebar 1','Det här är innehållet i sidorutan\r\n\r\n* En lista\r\n* skriven i\r\n* Markdown','block','markdown',NULL,'2017-06-03 17:41:16','2017-06-03 20:07:54',NULL),
+    (NULL,'flash-1','Flash 1','Detta är ett [b]flashinnehåll[/b]','block','bbcode',NULL,'2017-06-03 18:06:38','2017-06-03 20:07:17',NULL);
 
 DROP VIEW IF EXISTS `VContent`;
 CREATE VIEW `VContent` AS
@@ -82,4 +84,12 @@ WHERE
     AND (deleted IS NULL OR deleted > NOW())
     AND published <= NOW()
 ORDER BY published_date DESC
+;
+
+DROP VIEW IF EXISTS `VBlock`;
+CREATE VIEW `VBlock` AS
+SELECT
+    *,
+FROM content
+WHERE type="block"
 ;

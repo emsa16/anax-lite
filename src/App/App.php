@@ -29,7 +29,7 @@ class App
      *
      * @return boolean true if key is set, otherwise false
      */
-    function hasKeyPost($key)
+    public function hasKeyPost($key)
     {
         return array_key_exists($key, $_POST);
     }
@@ -44,7 +44,7 @@ class App
      *
      * @return mixed value from POST or the default value
      */
-    function getPost($key, $default = null)
+    public function getPost($key, $default = null)
     {
         if (is_array($key)) {
             // $key = array_flip($key);

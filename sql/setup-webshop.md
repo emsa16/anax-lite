@@ -82,4 +82,4 @@ Ger en rapport på vilka produkter som det behöver beställas flera av. Denna r
 
 ## testAPI
 En procedur som kapslar in exempelkod som visar upp databasens API. Vad denna procedur gör är att den lägger till en ny kund och en ny varukorg, vilket görs manuellt då procedurer för detta saknas i denna version. Den visar sedan exempel på följande procedurer, som presenterats ovan: addToBasket, updateBasketRow, removeBasketRow, showBasket, checkOut, showOrder, showRestock, removeOrder.
-Kör denna med följande SQL-sats: "CALL testAPI;"
+Kör denna med följande SQL-sats: "CALL testAPI();"

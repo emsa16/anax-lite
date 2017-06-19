@@ -177,7 +177,7 @@ $app->router->add("content/blog", function () use ($app) {
 $app->router->add("content/blog/**", function () use ($app) {
     $slug = basename($app->request->getCurrentUrl());
 
-    if ($slug == "blog") {
+    if ($slug == "blog") { // Blir fel om man skriver in blog/blog
         return;
     }
 
@@ -202,7 +202,7 @@ $app->router->add("content/blog/**", function () use ($app) {
 $app->router->add("content/pages/**", function () use ($app) {
     $path = basename($app->request->getCurrentUrl());
 
-    if ($path == "pages") {
+    if ($path == "pages") { //blir fel om man skriver in pages/pages
         return;
     }
 

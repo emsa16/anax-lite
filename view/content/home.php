@@ -14,6 +14,6 @@ $blockUrl = $app->url->create("content/block");
         <li><a href="<?= $pagesUrl ?>">Sidor</a></li>
         <li><a href="<?= $blogUrl ?>">Blogg</a></li>
         <li><a href="<?= $blockUrl ?>">Exempelsida för block</a></li>
-        <li><a href="<?= $adminUrl ?>">Admin (kräver inloggning)</a></li>
+        <li><a href="<?= $adminUrl ?>">Innehållsadministration (kräver inloggning)</a></li>
     </ul>
 </div>

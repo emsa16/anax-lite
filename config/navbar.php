@@ -36,6 +36,10 @@ return [
             "text" => "Filtertest",
             "route" => "filter",
         ],
+        "webshop-backend" => [
+            "text" => "Webshop backend",
+            "route" => "shop/admin",
+        ],
         "404" => [
             "text" => "404",
             "route" => "some/route",

@@ -32,7 +32,7 @@ body {
 
 .navbar ul li {
   display: inline-block;
-  margin: 0 1em;
+  margin: 0 0.5em;
 }
 
 .navbar a {
@@ -129,4 +129,8 @@ footer {
 
 .center {
   text-align: center;
+}
+
+.thumb {
+  width: 150px;
 }

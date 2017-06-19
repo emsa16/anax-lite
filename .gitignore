@@ -6,3 +6,4 @@
 /config/database.php
 /sql/setup-user.sql
 /sql/setup-content.sql
+/sql/setup-webshop.sql

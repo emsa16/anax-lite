@@ -140,9 +140,33 @@
 </p>
 
 <h2>Kursmoment 05</h2>
+
+<h3>Gick det bra att komma igång med det vi kallar programmering av databas, med transaktioner, lagrade procedurer, triggers, funktioner?</h3>
 <p>
-    Redovisningstext...
+    Nu börjar det hända grejer i databasen! Alla nya koncept som introducerades här kändes direkt applicerbara i arbetet med databasen. De var också ganska enkla att ta till sig, speciellt procedurer och funktioner är ju gamla bekanta programmeringskoncept. Transaktioner är ett väldigt enkelt men ovärderligt tillägg när databasen blir mer komplex och kräver justeringar i flera tabeller samtidigt. Det tog ett tag för mig att förstå skillnaden mellan lagrade procedurer och egendefinierade funktioner, och artiklarna förklarade inte detta direkt. Lagrade procedurer förstod jag egentligen direkt men varför man dessutom behövde funktioner begrep jag ej. Däremot hade kursboken i PHP en bra förklaring och efter att surfat runt lite mer på ämnet så började jag förstå skillnaden. Funktionerna behöver man egentligen först när innehållet i databasen behöver bearbetas på något sätt, framförallt om något ska beräknas.
 </p>
+
+<h3>Hur är din syn på att programmera på detta viset i databasen?</h3>
+<p>
+    Jag tycker om att kunna separera SQL-koden från mina PHP-dokument ganska långt, det blir renare att ha SQL-kommandon i lagrade procedurer i min SQL-setup-fil. I PHP-koden behöver jag då bara skriva in väldigt enkla SQL-kommandon och om jag skapar ett API som i uppgiften så räcker det egentligen med olika "CALL procedure();"-kommandon. Med detta sagt så har jag ändå uppskattat att SQL inte innehåller alltför mycket logik utan är en ganska ren datalagrare. Men med viss måtta så tror jag att programmering i databasen kan förbättra användningsmöjligheterna stort.
+</p>
+
+<h3>Några reflektioner kring din kod för backenden till webbshopen?</h3>
+<p>
+    Jag utgick ifrån webshop-exemplet från föreläsningen och kastade ut sådant som inte kändes relevant för uppgiften. Grunden kändes ändå stabil och jag är nöjd med mina tillägg och nuvarande struktur i databasen. Det finns ett par detaljer som inte är helt stabila dock. När man lägger till en ny produkt så finns det en lagrad procedur för detta, men den vet inte om vilket id-nummer den nyskapade produkten har, vilket öppnar för eventuella problem om det skulle finnas väldigt snarlika produkter i produkt-tabellen. Jag kunde inte hitta en lösning på detta än så länge. En annan sak som jag definitivt behöver lösa om jag tar koden vidare, är att om en produkt raderas från databasen, så försvinner den även från eventuella sparade ordrar, eftersom de båda tabellerna är sammankopplade. Detta leder till inkonsekvens, för om en order existerar så har produkten redan tagits från lagret så man ska inte behöva ändra i ordern även om produkten tas bort ur databasen. Jag har än så länge bara lagt en varning på backend-sidan om det, men en lösning vore att lägga till en "deleted"-kolumn i produkt-tabellen, så att produkterna aldrig tas bort permanent, vilket bevarar konsistensen i databasen.
+</p>
+<p>
+    Det tog ett bra tag innan jag kunde finna användning för egendefinierade funktioner. Det är ju knappt nåt som behöver beräknas i den nuvarande databasen. Till slut hittade jag ändå nåt och jag lade även till två funktioner som används för att kontrollera statusen på vissa element i databasen och skickar tillbaka bool-värden. Funktionerna används endast inuti mina lagrade procedurer och jag upplever inte att de ska dokumenteras som en del av API:t, utan de är mer en del av det interna, tillsammans med triggers.
+</p>
+<p>
+    Uppgiften i sig verkade först inte så krånglig, men när grundstrukturen började vara på plats så uppstod behov av väldigt mycket småjusteringar. Hela tiden kommer man på nya regler som man måste fixa till för att inte databasen ska kunna gå sönder om man ändrar eller tar bort något ur en tabell. Till slut måste jag börja prioritera ordentligt för ju närmare slutet jag trodde jag kom desto mer problem dök det upp, specialsituationer som kunde ställa till det i databasen. Speciellt krångligt blev det när jag lade in CRUD-gränssnittet på me-sidan för i och med det introducerades nya funktioner som kunde ställa till det i andra tabeller. Jag har åtgärdat de allvarligaste bristerna, men det finns fortfarande små förbättringar som kunde göras, vilket jag delvis beskrivit ovan.
+</p>
+
+<h3>Något du vill säga om koden generellt i och kring Anax Lite?</h3>
+<p>
+    Jag har inte haft tid att gå in och putsa i ramverkskoden utan fokuserat helt på databasen. Det finns dock många förbättringsmöjligheter märker jag, speciellt när man lägger till nya sidor hela tiden. Nu finns det ett flertal snarlika klasser för att kommunicera med databasen och även många snarlika vyer, som eventuellt kunde gå att föra samman. I och med phpdoc-uppgiften så insåg jag att jag inte dokumenterat mina klasser särskilt bra alls, så det verktyget är hjälpsamt i och med att denna listar alla dokumentationsblock som saknas i filerna.
+</p>
+
 
 <h2>Kursmoment 06</h2>
 <p>

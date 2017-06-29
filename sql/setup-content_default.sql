@@ -19,7 +19,7 @@ CREATE TABLE `content`
 
   `title` VARCHAR(120),
   `data` TEXT,
-  `type` CHAR(20),
+  `type` CHAR(20) NOT NULL,
   `filter` VARCHAR(80) DEFAULT NULL,
 
   -- MySQL version 5.6 and higher
@@ -89,7 +89,24 @@ ORDER BY published_date DESC
 DROP VIEW IF EXISTS `VBlock`;
 CREATE VIEW `VBlock` AS
 SELECT
-    *,
+    *
 FROM content
 WHERE type="block"
 ;
+
+
+
+--
+-- ADDING INDEXES
+--
+
+-- Finding type of content
+-- EXPLAIN SELECT * FROM Content WHERE type = 'post';
+-- EXPLAIN SELECT * FROM Content WHERE type = 'page';
+-- EXPLAIN SELECT * FROM Content WHERE type = 'block';
+
+CREATE INDEX index_type on content(type);
+
+-- EXPLAIN SELECT * FROM Content FORCE INDEX (index_type) WHERE type = 'post';
+-- EXPLAIN SELECT * FROM Content WHERE type = 'page';
+-- EXPLAIN SELECT * FROM Content WHERE type = 'block';

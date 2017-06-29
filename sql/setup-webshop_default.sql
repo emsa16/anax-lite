@@ -34,7 +34,7 @@ DROP TABLE IF EXISTS `Product`;
 --
 CREATE TABLE `Product` (
 	`id` INT AUTO_INCREMENT,
-    `description` VARCHAR(20),
+    `description` VARCHAR(20) NOT NULL,
     `image` VARCHAR(50),
     `price` DECIMAL(6,2),
 
@@ -67,7 +67,7 @@ CREATE TABLE `Prod2Cat` (
 CREATE TABLE `Inventory` (
 	`id` INT AUTO_INCREMENT,
     `prod_id` INT UNIQUE,
-    `items` INT,
+    `items` INT DEFAULT 0,
 
 	PRIMARY KEY (`id`),
 	FOREIGN KEY (`prod_id`) REFERENCES `Product` (`id`) ON DELETE CASCADE
@@ -682,3 +682,19 @@ DELIMITER ;
 
 
 -- CALL testAPI();
+
+
+
+--
+-- ADDING INDEXES
+--
+
+-- Text searching products in webshop
+-- EXPLAIN SELECT * FROM Product WHERE description = 'Vintage camera';
+CREATE INDEX product_name ON Product(description);
+-- EXPLAIN SELECT * FROM Product WHERE description = 'Vintage camera';
+
+-- Finding out what the stock is of products
+-- EXPLAIN SELECT * FROM Inventory WHERE items > 75;
+CREATE INDEX index_amount ON Inventory(items);
+-- EXPLAIN SELECT * FROM Inventory WHERE items > 75;

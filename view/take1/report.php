@@ -169,9 +169,35 @@
 
 
 <h2>Kursmoment 06</h2>
+
+<h3>Var du bekant med begreppet index i databaser sedan tidigare?</h3>
 <p>
-    Redovisningstext...
+    Jag kände inte till begreppet index som sådant i sammanhanget databaser, men jag har använt vissa element av det tidigare, närmare bestämt primary keys, foreign keys och unique-attribut, som alla hjälper till att optimera databasen, vilket ju är syftet med index. Än så länge har jag ju endast jobbat med ganska små databaser på min me-sida, så ibland är det svårt att kunna se var det finns flaskhalsar i databasen och att kunna urskilja om indexet gör någon skillnad, men jag förstår i alla fall principen bakom och nyttan med dem.
 </p>
+
+<h3>Berätta om hur du jobbade i uppgiften om index och vilka du valde att lägga till och skillnaden före/efter.</h3>
+<p>
+    Jag lade ganska mycket tid på att leta efter saker som kunde optimeras i mina nuvarande sql-satser, men insåg till sist att den befintliga strukturen redan var ganska optimerad med primary keys och unique-attribut från tidigare, så mina existerande sql-kommandon var redan nästan så optimerade som de kunde vara. Jag skapade därför två index för min webshop som inte används i nuvarande implementering men kan tänkas komma väl till pass i framtida versioner där man har en sökfunktion i webshopen. Indexet 'product_name' indexerar produktnamnet i tabellen Product, vilket gör det snabbare att söka efter produkter i webshopen, om man hade en textsökfunktion på sidan. Skillnaden blir att databasen endast kollar på 1 rad istället för en full table scan, vilket är ett bra resultat. Det andra indexet 'index_amount' indexerar antalet av varje produkt i lagret i tabellen Inventory. Detta kan vara användbart i ett framtida admingränssnitt. Skillnaden när jag kör 'EXPLAIN SELECT * FROM Inventory WHERE items < 75;' före och efter indexeringen är att raderna som genomsöks minskas från full table scan till 1, igen ett bra resultat. Jag skapade ett tredje index 'index_type' i tabellen content som indexerar innehållstypen. Detta används faktiskt i nuvarande implementering av sidan, och snabbar upp sökprocessen en aning. Det finns just nu 9 rader i tabellen och med hjälp av indexet söks endast 2, 3 respektive 4 rader igenom beroende på innehållstyp man letar efter. Dock fungerar detta inte helt klockrent. Om jag kör 'EXPLAIN SELECT * FROM Content WHERE type = 'post';' så kör databasen en full table scan, eftersom den verkar anse att indexet inte är tillräckligt bra i fallet med innehållstypen 'post'. Jag måste lägga till 'FORCE INDEX (index_type)' i ovanstående sats för att den ska använda indexet, som då går igenom 4 rader. Är det så att 4/9 rader är för icke-optimerat för att databasen ska använda det indexet? Jag läste också att man egentligen inte ska använda index på kolumner där det endast finns ett fåtal olika värden, som i detta fall. Nu blev det ändå såhär, då det var svårt att hitta andra platser att indexera.
+</p>
+
+<h3>Har du tidigare erfarenheter av att skriva kod som testar annan kod?</h3>
+<p>
+    I oopython-kursen använde vi enhetstester på ett mycket snarlikt sätt för att testa våra klasser, så proceduren här kändes väldigt bekant. Det var lätt att ta till sig PHPUnit och komma igång.
+</p>
+
+<h3>Hur ser du på begreppet enhetstestning och att skriva testbar kod?</h3>
+<p>
+    Jag känner mig tudelad inför enhetstestning. Att skriva testbar kod är jättebra och skapar en viss säkerhet när koden växer, så att grundfunktionerna i koden fortsätter att fungera. Jag tycker att filosofin bakom testdriven kod är bra, att man ska ha testerna som utgångspunkt och alltid återkomma till dem. Då vet man också om koden man skrivit följer den ursprungliga specifikationen. Samtidigt så kan kodstrukturen förändras väldigt mycket under arbetets gång och det man i början trodde var en bra uppdelning av till exempel metoder och klasser kanske visar sig inte optimal. Då behöver man istället skriva om sina tester, vilket leder till en hel del extra arbete.
+</p>
+<p>
+    Mitt stora problem med enhetstestning är att den inte alltid känns som att den testar koden realistiskt. Man testar enskilda enheter av koden vilket är bra för att kolla att grundfunktionaliteten är okej, men i verkiiga projekt ligger många problem i väldigt komplex kod och samverkan mellan olika enheter i koden. Där upplever jag att enhetstestning inte kan täcka upp helt, om man inte skriver hutlöst många tester med alla tänkbara specialfall. Någonstans där slutar enhetstesterna att göra arbetet effektivare. Sammanfattningsvis så tycker jag att enhetstestning är bra och ska användas, men med viss måtta.
+</p>
+
+<h3>Hur gick det att hitta testbar kod bland dina klasser i Anax Lite?</h3>
+<p>
+    De flesta klasserna har något yttre beroende vilket gjorde dem olämpliga för uppgiftens omfattning. Antingen var de beroende av en databaskoppling, eller sessioner och kakor. Jag bestämde mig därför för att testa klassen TextFilter, som är rakt på sak och enkel att testa utan att bygga upp en komplex testmiljö. Jag testar alla metoder i klassen och den processen gick ganska smidigt, då klassen är väldigt enkel och alla metoderna gör samma sak, men med olika filter. Det gick också enkelt att testa Guess-klassen och lyckas nå 100% kodtäckning där. Dock saknades GuessException-klassen i mitt repo, så jag måste skapa den själv för att kunna testa den och få allt att gå igenom.
+</p>
+
 
 <h2>Kursmoment 07/10</h2>
 <p>
